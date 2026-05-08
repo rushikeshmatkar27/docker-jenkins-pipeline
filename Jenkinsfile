@@ -3,17 +3,17 @@ pipeline {
     stages {
         stage('Docker Build') {
             steps {
-                sh 'docker build -t atuljkamble/helloworldpython .'
+                sh 'docker build -t docker.ioatuljkamble/helloworldpython .'
             }
         }
         stage('Docker Push') {
             steps {
-                sh 'docker push atuljkamble/helloworldpython'
+                sh 'docker push docker.io/atuljkamble/helloworldpython'
             }
         }
         stage('Container Run') {
             steps {
-                sh 'docker run -d atuljkamble/helloworldpython'
+                sh 'docker run -d docker.io/atuljkamble/helloworldpython'
             }
         }
     }
