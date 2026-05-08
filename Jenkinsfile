@@ -1,5 +1,5 @@
-pipelines 
-agent any {
+pipeline {
+    agent any
     stages {
         stage('Docker Build') {
             steps {
@@ -11,25 +11,20 @@ agent any {
                 sh 'sudo docker push atuljkamble/helloworldpython'
             }
         }
-        stage ('Container Run') {
+        stage('Container Run') {
             steps {
                 sh 'sudo docker run -d atuljkamble/helloworldpython'
-        }
-        }
-        if (success) {
-            stage('Notification') {
-                steps {
-                    echo 'Docker image built and pushed successfully!'
-                }
-            }
-        } else {
-            stage('Notification') {
-                steps {
-                    echo 'Docker build or push failed.'
-                }
             }
         }
     }
-}               
+    post {
+        success {
+            echo 'Docker image built and pushed successfully!'
+        }
+        failure {
+            echo 'Docker build or push failed.'
+        }
+    }
+}
 
 
