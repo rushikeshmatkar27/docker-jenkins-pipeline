@@ -1,22 +1,27 @@
 pipeline {
     agent any
+    environment {
+        IMAGE_NAME = 'atuljkamble/helloworldpython'
+        IMAGE_TAG  = "${env.BUILD_NUMBER}"
+    }
     stages {
         stage('Docker Build') {
             steps {
-                sh 'docker build -t atuljkamble/helloworldpython .'
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .'
             }
         }
         stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
-                    sh 'docker push atuljkamble/helloworldpython'
+                    sh 'docker push ${IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker push ${IMAGE_NAME}:latest'
                 }
             }
         }
         stage('Container Run') {
             steps {
-                sh 'docker run -d atuljkamble/helloworldpython'
+                sh 'docker run -d ${IMAGE_NAME}:${IMAGE_TAG}'
             }
         }
     }
