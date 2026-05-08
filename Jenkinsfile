@@ -3,17 +3,20 @@ pipeline {
     stages {
         stage('Docker Build') {
             steps {
-                sh 'docker build -t docker.ioatuljkamble/helloworldpython .'
+                sh 'docker build -t atuljkamble/helloworldpython .'
             }
         }
         stage('Docker Push') {
             steps {
-                sh 'docker push docker.io/atuljkamble/helloworldpython'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                    sh 'docker push atuljkamble/helloworldpython'
+                }
             }
         }
         stage('Container Run') {
             steps {
-                sh 'docker run -d docker.io/atuljkamble/helloworldpython'
+                sh 'docker run -d atuljkamble/helloworldpython'
             }
         }
     }
