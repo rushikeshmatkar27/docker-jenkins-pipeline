@@ -4,7 +4,7 @@ A CI/CD project that automates building, tagging, pushing, and running a Python 
 
 ---
 
-## Project Structure
+## Project Structure 
 
 ```
 docker-jenkins-pipeline/
